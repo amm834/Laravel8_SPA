@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ProductRequest;
+
 
 class ProductController extends Controller
 {
@@ -23,8 +25,8 @@ class ProductController extends Controller
   * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
-  public function store(Request $request) {
-    $validator = Validator::make($request->all(), [
+  public function store(ProductRequest $request) {
+    /*$validator = Validator::make($request->all(), [
       'name' => 'required|string',
       'price' => 'required|numeric'
     ]);
@@ -33,7 +35,9 @@ class ProductController extends Controller
     } else {
       $product = Product::create($request->only('name', 'price'));
       return $product;
-    }
+    }*/
+    $product = Product::create($request->only('name', 'price'));
+      return $product; 
   }
 
   /**
@@ -42,8 +46,7 @@ class ProductController extends Controller
   * @param  int  $id
   * @return \Illuminate\Http\Response
   */
-  public function show($id) {
-    $product = Product::whereId($id)->firstOrFail();
+  public function show(Product $product) {
     return $product;
   }
 
@@ -54,7 +57,7 @@ class ProductController extends Controller
   * @param  int  $id
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request, $id) {
+  public function update(Request $request,Product $product) {
         $validator = Validator::make($request->all(), [
       'name' => 'nullable|string',
       'price' => 'nullable|numeric'
@@ -62,7 +65,6 @@ class ProductController extends Controller
     if($validator->fails()){
       return $validator->errors();
     }else{
-    $product = Product::find($id);
     $product->update($request->only('name', 'price'));
     return $product;
     }
@@ -74,9 +76,7 @@ class ProductController extends Controller
   * @param  int  $id
   * @return \Illuminate\Http\Response
   */
-  public function destroy($id) {
-    $product = Product::find($id);
-    $product->delete();
-    return $product;
+  public function destroy(Product $product) {
+    return $product->delete();
   }
 }
