@@ -2014,20 +2014,20 @@ __webpack_require__.r(__webpack_exports__);
   name: "ProductComponent",
   data: function data() {
     return {
-      products: [{
-        id: 1,
-        name: "Food",
-        price: 200
-      }, {
-        id: 2,
-        name: "Fruit",
-        price: 200
-      }, {
-        id: 3,
-        name: "Cafe",
-        price: 200
-      }]
+      products: []
     };
+  },
+  methods: {
+    view: function view() {
+      var _this = this;
+
+      axios.get('/api/products').then(function (response) {
+        _this.products = response.data;
+      });
+    }
+  },
+  created: function created() {
+    this.view();
   }
 });
 

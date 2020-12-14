@@ -67,15 +67,22 @@
 </template>
 <script>
   export default {
-    name:"ProductComponent",
-    data(){
-      return{
-        products:[
-          {id:1,name:"Food",price:200},
-          {id:2,name:"Fruit",price:200},
-          {id:3,name:"Cafe",price:200},
-          ]
+    name: "ProductComponent",
+    data() {
+      return {
+        products: []
       }
+    },
+    methods: {
+      view() {
+        axios.get('/api/products')
+        .then(response=> {
+          this.products = response.data
+        })
+      }
+    },
+    created() {
+      this.view();
     }
   }
   </script>
