@@ -2010,12 +2010,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProductComponent",
   data: function data() {
     return {
+      isEdit: false,
       products: [],
       product: {
+        id: '',
         name: '',
         price: ''
       }
@@ -2032,6 +2037,7 @@ __webpack_require__.r(__webpack_exports__);
     store: function store() {
       var _this2 = this;
 
+      this.isEdit = false;
       axios.post('/api/products', this.product).then(function (response) {
         _this2.view();
 
@@ -2039,6 +2045,15 @@ __webpack_require__.r(__webpack_exports__);
           name: '',
           price: ''
         };
+      });
+    },
+    edit: function edit(product) {
+      var _this3 = this;
+
+      this.isEdit = true;
+      this.product.id = product.id, this.product.name = product.name, this.product.price = product.price;
+      axios.put("/api/products/".concat(product.id), this.product).then(function (response) {
+        _this3.view();
       });
     }
   },
@@ -37685,12 +37700,43 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container my-5" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "row" }, [
+      _c(
+        "div",
+        { staticClass: "col-md-8 offset-md-4 d-flex justify-content-between" },
+        [
+          _c("div", { staticClass: "col-4" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-info",
+                on: {
+                  click: function($event) {
+                    return _vm.store()
+                  }
+                }
+              },
+              [_vm._v("Create")]
+            )
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-md-4 mb-3" }, [
         _c("div", { staticClass: "card" }, [
-          _vm._m(1),
+          _c("div", { staticClass: "card-header" }, [
+            _c("h4", [
+              _vm._v(
+                "\n            " +
+                  _vm._s(_vm.isEdit ? "Edit" : "Create") +
+                  "\n          "
+              )
+            ])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c(
@@ -37699,7 +37745,7 @@ var render = function() {
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    return _vm.store($event)
+                    _vm.isEdit ? _vm.edit() : _vm.store()
                   }
                 }
               },
@@ -37759,7 +37805,7 @@ var render = function() {
                 _c(
                   "button",
                   { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-                  [_vm._v("Create")]
+                  [_vm._v(_vm._s(_vm.isEdit ? "Edit" : "Create"))]
                 )
               ]
             )
@@ -37770,7 +37816,7 @@ var render = function() {
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "table-responsive" }, [
           _c("table", { staticClass: "table" }, [
-            _vm._m(2),
+            _vm._m(1),
             _vm._v(" "),
             _c(
               "tbody",
@@ -37788,9 +37834,22 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(product.price) + "$")]),
                   _vm._v(" "),
-                  _vm._m(3, true),
+                  _c("td", { staticClass: "text-center" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-success",
+                        on: {
+                          click: function($event) {
+                            return _vm.edit(product)
+                          }
+                        }
+                      },
+                      [_vm._v("Edit")]
+                    )
+                  ]),
                   _vm._v(" "),
-                  _vm._m(4, true)
+                  _vm._m(2, true)
                 ])
               }),
               0
@@ -37806,32 +37865,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-4 offset-md-8" }, [
-        _c("div", { staticClass: "input-group mb-3" }, [
-          _c("input", {
-            staticClass: "form-control rounded-0",
-            attrs: { type: "text", placeholder: "Search Product" }
-          }),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-secondary rounded-0",
-              attrs: { type: "button", id: "button-addon2" }
-            },
-            [_vm._v("Search")]
-          )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h4", [_vm._v("\n            Create New Product\n          ")])
+    return _c("div", { staticClass: "input-group mb-3 col-8 " }, [
+      _c("input", {
+        staticClass: "form-control rounded-0",
+        attrs: { type: "text", placeholder: "Search Product" }
+      }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary rounded-0",
+          attrs: { type: "button", id: "button-addon2" }
+        },
+        [_vm._v("Search")]
+      )
     ])
   },
   function() {
@@ -37852,14 +37899,6 @@ var staticRenderFns = [
           [_vm._v("Action")]
         )
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center" }, [
-      _c("button", { staticClass: "btn btn-success" }, [_vm._v("Edit")])
     ])
   },
   function() {

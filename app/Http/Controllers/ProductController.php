@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductUpdateRequest;
 
 
 class ProductController extends Controller
@@ -16,7 +17,7 @@ class ProductController extends Controller
   * @return \Illuminate\Http\Response
   */
   public function index() {
-    return Product::all();
+    return Product::orderByDesc('id')->get();
   }
 
   /**
@@ -26,18 +27,8 @@ class ProductController extends Controller
   * @return \Illuminate\Http\Response
   */
   public function store(ProductRequest $request) {
-    /*$validator = Validator::make($request->all(), [
-      'name' => 'required|string',
-      'price' => 'required|numeric'
-    ]);
-    if ($validator->fails()) {
-      return $validator->errors();
-    } else {
-      $product = Product::create($request->only('name', 'price'));
-      return $product;
-    }*/
     $product = Product::create($request->only('name', 'price'));
-      return $product; 
+    return $product;
   }
 
   /**
@@ -57,17 +48,8 @@ class ProductController extends Controller
   * @param  int  $id
   * @return \Illuminate\Http\Response
   */
-  public function update(Request $request,Product $product) {
-        $validator = Validator::make($request->all(), [
-      'name' => 'nullable|string',
-      'price' => 'nullable|numeric'
-    ]);
-    if($validator->fails()){
-      return $validator->errors();
-    }else{
-    $product->update($request->only('name', 'price'));
-    return $product;
-    }
+  public function update(ProductUpdateRequest $request, Product $product) {
+    return $product->update($request->only('name', 'price'));
   }
 
   /**

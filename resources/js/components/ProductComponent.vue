@@ -1,24 +1,27 @@
 <template>
   <div class="container my-5">
     <div class="row">
-      <div class="col-md-4 offset-md-8">
-        <div class="input-group mb-3">
+      <div class="col-md-8 offset-md-4 d-flex justify-content-between">
+        <div class="col-4">
+          <button class="btn btn-info" @click="store()">Create</button>
+        </div>
+        <div class="input-group mb-3 col-8 ">
           <input type="text" class="form-control rounded-0" placeholder="Search Product">
           <button class="btn btn-secondary rounded-0" type="button" id="button-addon2">Search</button>
         </div>
       </div>
     </div>
     <div class="row">
-      <!--  Create Form -->
+      <!--  Create and Edit Form -->
       <div class="col-md-4 mb-3">
         <div class="card">
           <div class="card-header">
             <h4>
-              Create New Product
+              {{ isEdit ? 'Edit' : 'Create'}}
             </h4>
           </div>
           <div class="card-body">
-            <form @submit.prevent="store">
+            <form @submit.prevent="isEdit ? edit() : store()">
               <div class="form-group">
                 <label>Name</label>
                 <input type="text" name="name" class="form-control" v-model="product.name" />
@@ -27,12 +30,12 @@
                 <label>Price</label>
                 <input type="number" class="form-control" name="price" v-model="product.price" />
               </div>
-              <button type="submit" class="btn btn-primary">Create</button>
+              <button type="submit" class="btn btn-primary">{{ isEdit ? 'Edit'  : 'Create' }}</button>
             </form>
           </div>
         </div>
       </div>
-      <!--vData Table -->
+      <!-- Data Table -->
       <div class="col-md-8">
         <div class="table-responsive">
           <table class="table">
@@ -51,7 +54,7 @@
                 <td>{{product.name}}</td>
                 <td>{{product.price}}$</td>
                 <td class="text-center">
-                  <button class="btn btn-success">Edit</button>
+                  <button class="btn btn-success" @click="edit(product)">Edit</button>
                 </td>
                 <td class="text-center">
                   <button class="btn btn-danger">Delete</button>
@@ -70,8 +73,10 @@
     name: "ProductComponent",
     data() {
       return {
+        isEdit: false,
         products: [],
         product: {
+          id: '',
           name: '',
           price: ''
         }
@@ -82,9 +87,10 @@
         axios.get('/api/products')
         .then(response=> {
           this.products = response.data
-        })
+        });
       },
       store() {
+        this.isEdit = false;
         axios.post('/api/products', this.product)
         .then(response=> {
           this.view();
@@ -92,6 +98,16 @@
             name: '',
             price: ''
           }
+        })
+      },
+      edit(product) {
+        this.isEdit = true;
+        this.product.id = product.id,
+        this.product.name = product.name,
+        this.product.price = product.price
+        axios.put(`/api/products/${product.id}`, this.product)
+        .then(response=> {
+          this.view();
         })
       }
     },
