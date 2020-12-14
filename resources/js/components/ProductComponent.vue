@@ -18,14 +18,14 @@
             </h4>
           </div>
           <div class="card-body">
-            <form>
+            <form @submit.prevent="store">
               <div class="form-group">
                 <label>Name</label>
-                <input type="text" class="form-control" />
+                <input type="text" name="name" class="form-control" v-model="product.name" />
               </div>
               <div class="form-group">
                 <label>Price</label>
-                <input type="number" class="form-control" />
+                <input type="number" class="form-control" name="price" v-model="product.price" />
               </div>
               <button type="submit" class="btn btn-primary">Create</button>
             </form>
@@ -70,7 +70,11 @@
     name: "ProductComponent",
     data() {
       return {
-        products: []
+        products: [],
+        product: {
+          name: '',
+          price: ''
+        }
       }
     },
     methods: {
@@ -78,6 +82,16 @@
         axios.get('/api/products')
         .then(response=> {
           this.products = response.data
+        })
+      },
+      store() {
+        axios.post('/api/products', this.product)
+        .then(response=> {
+          this.view();
+          this.product = {
+            name: '',
+            price: ''
+          }
         })
       }
     },
