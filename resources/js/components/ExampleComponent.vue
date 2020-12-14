@@ -8,7 +8,7 @@
           </div>
 
           <div class="card-body">
-            I'm an example component.
+            I'm example component.
           </div>
         </div>
       </div>
