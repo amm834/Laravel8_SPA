@@ -6,6 +6,10 @@
 
   <title>Laravel</title>
 <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+<script src="{{ asset('js/eruda.js') }}"></script>
+<script>
+  eruda.init();
+</script>
 </head>
 <body>
 <div id="app">

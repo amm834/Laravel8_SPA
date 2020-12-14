@@ -44,10 +44,12 @@
                 <th scope="col" colspan="2" class="text-center">Action</th>       </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Product1</td>
-                <td>200$</td>
+              <tr v-for="product in products" :key="products.id">
+                <th scope="row">
+                  {{product.id}}
+                </th>
+                <td>{{product.name}}</td>
+                <td>{{product.price}}$</td>
                 <td class="text-center">
                   <button class="btn btn-success">Edit</button>
                 </td>
@@ -64,5 +66,16 @@
   </div>
 </template>
 <script>
-  export default {}
+  export default {
+    name:"ProductComponent",
+    data(){
+      return{
+        products:[
+          {id:1,name:"Food",price:200},
+          {id:2,name:"Fruit",price:200},
+          {id:3,name:"Cafe",price:200},
+          ]
+      }
+    }
+  }
   </script>
