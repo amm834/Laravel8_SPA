@@ -94,9 +94,11 @@
     },
     methods: {
       view(page = 1) {
+        this.$Progress.start();
         axios.get('/api/products?page=' +  page + '&search=' + this.search)
         .then(response=> {
-          this.products = response.data
+          this.products = response.data;
+          this.$Progress.finish();
         });
       },
       createProduct() {

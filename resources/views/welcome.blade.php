@@ -13,6 +13,7 @@
 </head>
 <body>
 <div id="app">
+  <vue-progress-bar></vue-progress-bar>
   <product-component></product-component>
 </div>
 <script src="{{ mix('/js/app.js') }}"></script>
