@@ -57,7 +57,7 @@
                   <button class="btn btn-success" @click="edit(product)">Edit</button>
                 </td>
                 <td class="text-center">
-                  <button class="btn btn-danger">Delete</button>
+                  <button class="btn btn-danger" @click="destroy(product.id)">Delete</button>
                 </td>
               </tr>
             </tbody>
@@ -109,6 +109,15 @@
       update() {
         axios.put(`/api/products/${this.product.id}`, this.product)
         .then(response=>this.view())
+      },
+      destroy(id){
+        if(!confirm("Are You Sure To Delete?")){
+          return;
+        }
+      axios.delete(`/api/products/${id}`)
+      .then(res=>{
+        this.view();
+      })
       }
     },
     created() {
