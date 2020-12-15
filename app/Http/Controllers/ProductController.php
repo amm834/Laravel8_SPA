@@ -17,7 +17,12 @@ class ProductController extends Controller
   * @return \Illuminate\Http\Response
   */
   public function index() {
-    return Product::orderByDesc('id')->paginate(5);
+    /* Get from ?search= */
+    if (request('search')) {
+      return Product::where('name', 'like', '%'.request('search').'%')->orderByDesc('id')->paginate(5);
+    } else {
+      return Product::orderByDesc('id')->paginate(5);
+    }
   }
 
   /**

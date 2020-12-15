@@ -2025,7 +2025,8 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         name: '',
         price: ''
-      }
+      },
+      search: ''
     };
   },
   methods: {
@@ -2033,7 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get('/api/products?page=' + page).then(function (response) {
+      axios.get('/api/products?page=' + page + '&search=' + this.search).then(function (response) {
         _this.products = response.data;
       });
     },
@@ -38334,7 +38335,39 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _vm._m(0)
+          _c("div", { staticClass: "input-group mb-3 col-8 " }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.search,
+                  expression: "search"
+                }
+              ],
+              staticClass: "form-control rounded-0",
+              attrs: { type: "text", placeholder: "Search Product" },
+              domProps: { value: _vm.search },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.search = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary rounded-0",
+                attrs: { type: "button", id: "button-addon2" },
+                on: { click: _vm.view }
+              },
+              [_vm._v("Search")]
+            )
+          ])
         ]
       )
     ]),
@@ -38346,7 +38379,7 @@ var render = function() {
             _c("h4", [
               _vm._v(
                 "\n            " +
-                  _vm._s(_vm.isEdit ? "Edit" : "Create") +
+                  _vm._s(_vm.isEdit ? "Edit Product" : "Create") +
                   "\n          "
               )
             ])
@@ -38433,7 +38466,7 @@ var render = function() {
           { staticClass: "table-responsive" },
           [
             _c("table", { staticClass: "table" }, [
-              _vm._m(1),
+              _vm._m(0),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -38498,26 +38531,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group mb-3 col-8 " }, [
-      _c("input", {
-        staticClass: "form-control rounded-0",
-        attrs: { type: "text", placeholder: "Search Product" }
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary rounded-0",
-          attrs: { type: "button", id: "button-addon2" }
-        },
-        [_vm._v("Search")]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

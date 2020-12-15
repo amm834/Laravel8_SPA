@@ -6,8 +6,8 @@
           <button class="btn btn-info" @click="store()">Create</button>
         </div>
         <div class="input-group mb-3 col-8 ">
-          <input type="text" class="form-control rounded-0" placeholder="Search Product">
-          <button class="btn btn-secondary rounded-0" type="button" id="button-addon2">Search</button>
+          <input type="text" class="form-control rounded-0" placeholder="Search Product" v-model="search">
+          <button @click="view" class="btn btn-secondary rounded-0" type="button" id="button-addon2">Search</button>
         </div>
       </div>
     </div>
@@ -17,7 +17,7 @@
         <div class="card">
           <div class="card-header">
             <h4>
-              {{ isEdit ? 'Edit' : 'Create'}}
+              {{ isEdit ? 'Edit Product' : 'Create'}}
             </h4>
           </div>
           <div class="card-body">
@@ -81,12 +81,13 @@
           id: '',
           name: '',
           price: ''
-        }
+        },
+        search:''
       }
     },
     methods: {
       view(page = 1) {
-        axios.get('/api/products?page=' + page)
+        axios.get('/api/products?page=' +  page + '&search=' + this.search)
         .then(response=> {
           this.products = response.data
         });
@@ -126,7 +127,7 @@
         .then(res=> {
           this.view();
         })
-      }
+      },
     },
     created() {
       this.view();
