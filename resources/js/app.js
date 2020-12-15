@@ -8,11 +8,17 @@ import {
 } from 'vform';
 import Swal from 'sweetalert2';
 import VueProgressBar from 'vue-progressbar';
+import Loading from 'vue-loading-overlay';
+// Init plugin
+Vue.use(Loading,{
+  color:'#5176f7'
+});
+
 
 Vue.use(VueProgressBar, {
   color: '#4cf9a2',
   failedColor: 'red',
-  thickness:'3px',
+  thickness: '3px',
   transition: {
     speed: '0.9s',
     opacity: '0.9s',

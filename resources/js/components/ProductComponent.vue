@@ -89,16 +89,28 @@
           price: ''
         }),
         search: '',
-        message: ''
+        message: '',
+        fullPage: true
       }
     },
     methods: {
       view(page = 1) {
+        let loader = this.$loading.show({
+          // Optional parameters
+          container: this.fullPage ? null: this.$refs.formContainer,
+          canCancel: true,
+          onCancel: this.onCancel,
+        });
         this.$Progress.start();
         axios.get('/api/products?page=' +  page + '&search=' + this.search)
         .then(response=> {
           this.products = response.data;
           this.$Progress.finish();
+          loader.hide();
+        })
+        .catch(errors=> {
+          this.$Progress.finish();
+          loader.hide();
         });
       },
       createProduct() {
