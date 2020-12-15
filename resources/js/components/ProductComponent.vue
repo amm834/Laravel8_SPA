@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-8 offset-md-4 d-flex justify-content-between">
         <div class="col-4">
-          <button class="btn btn-info" @click="store()">Create</button>
+          <button class="btn btn-info" @click="createProduct()">Create</button>
         </div>
         <div class="input-group mb-3 col-8 ">
           <input type="text" class="form-control rounded-0" placeholder="Search Product" v-model="search">
@@ -21,14 +21,19 @@
             </h4>
           </div>
           <div class="card-body">
+            <alert-error :form="product" :message="message"></alert-error>
             <form @submit.prevent="isEdit ? update() : store()">
               <div class="form-group">
                 <label>Name</label>
-                <input type="text" name="name" class="form-control" v-model="product.name" />
+                <input type="text" name="name" class="form-control" v-model="product.name" :class="{ 'is-invalid': product.errors.has('name') }" />
+                <has-error :form="product" field="name"></has-error>
+
               </div>
               <div class="form-group">
                 <label>Price</label>
-                <input type="number" class="form-control" name="price" v-model="product.price" />
+                <input type="number" class="form-control" name="price" v-model="product.price" :class="{ 'is-invalid': product.errors.has('price') }" />
+                <has-error :form="product" field="price"></has-error>
+
               </div>
               <button type="submit" class="btn btn-primary">{{ isEdit ? 'Edit'  : 'Create' }}</button>
             </form>
@@ -71,18 +76,20 @@
   </div>
 </template>
 <script>
+
   export default {
     name: "ProductComponent",
     data() {
       return {
         isEdit: false,
         products: {},
-        product: {
+        product: new Form({
           id: '',
           name: '',
           price: ''
-        },
-        search:''
+        }),
+        search: '',
+        message: ''
       }
     },
     methods: {
@@ -92,31 +99,32 @@
           this.products = response.data
         });
       },
-      store() {
+      createProduct() {
+        this.product.reset();
         this.isEdit = false;
-        axios.post('/api/products', this.product)
+
+      },
+      store() {
+        this.product.clear();
+        this.product.post('/api/products')
         .then(response=> {
           this.view();
-          this.product = {
-            name: '',
-            price: ''
-          }
+          this.product.reset();
+        })
+        .catch(errors=> {
+          this.message = errors.response.data.message;
         })
       },
       edit(product) {
+        this.product.clear();
         this.isEdit = true;
-        this.product.id = product.id,
-        this.product.name = product.name,
-        this.product.price = product.price
+        this.product.fill(product)
       },
       update() {
-        axios.put(`/api/products/${this.product.id}`, this.product)
+        this.product.put(`/api/products/${this.product.id}`)
         .then(response=> {
           this.view();
-          this.product = {
-            name: '',
-            price: ''
-          };
+          this.product.reset();
         })
       },
       destroy(id) {
