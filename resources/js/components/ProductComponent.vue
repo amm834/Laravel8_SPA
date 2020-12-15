@@ -47,7 +47,7 @@
                 <th scope="col" colspan="2" class="text-center">Action</th>       </tr>
             </thead>
             <tbody>
-              <tr v-for="product in products" :key="products.id">
+              <tr v-for="product in products.data" :key="products.id">
                 <th scope="row">
                   {{product.id}}
                 </th>
@@ -62,7 +62,9 @@
               </tr>
             </tbody>
           </table>
+          <!-- Pagination  -->
 
+          <pagination :data="products" @pagination-change-page="view"></pagination>
         </div>
       </div>
     </div>
@@ -74,7 +76,7 @@
     data() {
       return {
         isEdit: false,
-        products: [],
+        products: {},
         product: {
           id: '',
           name: '',
@@ -83,8 +85,8 @@
       }
     },
     methods: {
-      view() {
-        axios.get('/api/products')
+      view(page = 1) {
+        axios.get('/api/products?page=' + page)
         .then(response=> {
           this.products = response.data
         });
@@ -108,16 +110,22 @@
       },
       update() {
         axios.put(`/api/products/${this.product.id}`, this.product)
-        .then(response=>this.view())
+        .then(response=> {
+          this.view();
+          this.product = {
+            name: '',
+            price: ''
+          };
+        })
       },
-      destroy(id){
-        if(!confirm("Are You Sure To Delete?")){
+      destroy(id) {
+        if (!confirm("Are You Sure To Delete?")) {
           return;
         }
-      axios.delete(`/api/products/${id}`)
-      .then(res=>{
-        this.view();
-      })
+        axios.delete(`/api/products/${id}`)
+        .then(res=> {
+          this.view();
+        })
       }
     },
     created() {

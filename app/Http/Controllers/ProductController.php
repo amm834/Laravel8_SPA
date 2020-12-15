@@ -17,7 +17,7 @@ class ProductController extends Controller
   * @return \Illuminate\Http\Response
   */
   public function index() {
-    return Product::orderByDesc('id')->get();
+    return Product::orderByDesc('id')->paginate(5);
   }
 
   /**

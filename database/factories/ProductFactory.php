@@ -21,6 +21,7 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+      Product::truncate();
         return [
             'name'=>$this->faker->name,
             'price'=>rand(100,300)
