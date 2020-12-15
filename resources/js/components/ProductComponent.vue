@@ -21,7 +21,7 @@
             </h4>
           </div>
           <div class="card-body">
-            <form @submit.prevent="isEdit ? edit() : store()">
+            <form @submit.prevent="isEdit ? update() : store()">
               <div class="form-group">
                 <label>Name</label>
                 <input type="text" name="name" class="form-control" v-model="product.name" />
@@ -105,10 +105,10 @@
         this.product.id = product.id,
         this.product.name = product.name,
         this.product.price = product.price
-        axios.put(`/api/products/${product.id}`, this.product)
-        .then(response=> {
-          this.view();
-        })
+      },
+      update() {
+        axios.put(`/api/products/${this.product.id}`, this.product)
+        .then(response=>this.view())
       }
     },
     created() {

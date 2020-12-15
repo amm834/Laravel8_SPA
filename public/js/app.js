@@ -2048,12 +2048,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     edit: function edit(product) {
-      var _this3 = this;
-
       this.isEdit = true;
       this.product.id = product.id, this.product.name = product.name, this.product.price = product.price;
-      axios.put("/api/products/".concat(product.id), this.product).then(function (response) {
-        _this3.view();
+    },
+    update: function update() {
+      var _this3 = this;
+
+      axios.put("/api/products/".concat(this.product.id), this.product).then(function (response) {
+        return _this3.view();
       });
     }
   },
@@ -37745,7 +37747,7 @@ var render = function() {
                 on: {
                   submit: function($event) {
                     $event.preventDefault()
-                    _vm.isEdit ? _vm.edit() : _vm.store()
+                    _vm.isEdit ? _vm.update() : _vm.store()
                   }
                 }
               },
